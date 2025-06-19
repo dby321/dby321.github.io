@@ -448,7 +448,25 @@ async function signMessage(hashedPassword, message) {
 }
 exports.signMessage = signMessage;
 
-const cryptoRandomString = require('crypto-random-string');
+function getRandomAlphanum() {
+    const possibleCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    let byteArray;
+    let parsedInt;
+
+    // Keep generating new random bytes until we get a value that falls
+    // within a range that can be evenly divided by possibleCharacters.length
+    do {
+        byteArray = crypto.getRandomValues(new Uint8Array(1));
+        // extract the lowest byte to get an int from 0 to 255 (probably unnecessary, since we're only generating 1 byte)
+        parsedInt = byteArray[0] & 0xff;
+    } while (parsedInt >= 256 - (256 % possibleCharacters.length));
+
+    // Take the modulo of the parsed integer to get a random number between 0 and totalLength - 1
+    const randomIndex = parsedInt % possibleCharacters.length;
+
+    return possibleCharacters[randomIndex];
+}
 
 /**
  * Generate a random string of a given length.
@@ -457,7 +475,13 @@ const cryptoRandomString = require('crypto-random-string');
  * @returns {string}
  */
 function generateRandomString(length) {
-    return cryptoRandomString({ length, type: 'alphanumeric' });
+    let randomString = "";
+
+    for (let i = 0; i < length; i++) {
+        randomString += getRandomAlphanum();
+    }
+
+    return randomString;
 }
 exports.generateRandomString = generateRandomString;
 
