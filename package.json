@@ -29,7 +29,8 @@
     "vue": "^2.6.14",
     "vue-dplayer": "^0.0.10",
     "vue-markdown": "^2.2.4",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "crypto-random-string": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
