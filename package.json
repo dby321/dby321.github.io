@@ -16,6 +16,7 @@
     "@fullcalendar/vue": "^6.1.15",
     "axios": "^1.7.5",
     "core-js": "^3.8.3",
+    "docsify-cli": "^4.4.4",
     "docsify-darklight-theme": "^3.2.0",
     "element-ui": "^2.15.14",
     "gitalk": "^1.8.0",
