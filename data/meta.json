@@ -1,0 +1,9 @@
+{
+  "v": 1,
+  "kdf": "PBKDF2-SHA256",
+  "iterations": 600000,
+  "salt": "mJnNJ0ETsh0OCkcUtbnmWA==",
+  "cipher": "AES-256-GCM",
+  "indexFile": "index.9f6f2c35.bin",
+  "buildId": "2026-11-17-9f6f2c35"
+}
