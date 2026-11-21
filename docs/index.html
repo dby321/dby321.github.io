@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="description" content="千里水草的个人博客：技术笔记与在线站点导航，包含书籍人物关系图谱、国内二次元游戏厂商图谱与山姆购物指南。">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="theme-color" content="#f7f4ed">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
     <link rel="stylesheet" href="https://unpkg.com/docsify-toc@1.0.0/dist/toc.css">
@@ -16,6 +17,7 @@
             type="text/css"
     />
     <link rel="stylesheet" href="https://unpkg.com/docsify-giscus@1.0.0/dist/giscus.css">
+    <link rel="stylesheet" href="assets/custom.css">
 </head>
 <body>
 <div id="app"></div>
@@ -36,6 +38,8 @@
         mergeNavbar: true,
         logo: './assets/favicon.ico',
         name: '千里水草的个人博客', // 文档标题，会显示在侧边栏顶部
+        themeColor: '#8c2f39',
+        auto2top: true,
         repo: 'https://github.com/dby321', // 右上角Github图标链接
         loadNavbar: true, // 默认加载 _sidebar.md，作为顶部导航栏
         loadSidebar: true, // 默认加载 _sidebar.md，作为侧边栏
@@ -87,38 +91,38 @@
             title: '目录',
         },
         darklightTheme: {
-            siteFont : "PT Sans",
-            defaultTheme : 'dark',
-            codeFontFamily : 'Roboto Mono, Monaco, courier, monospace',
-            bodyFontSize : '17px',
+            siteFont : '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
+            defaultTheme : 'light',
+            codeFontFamily : 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+            bodyFontSize : '16px',
             dark: {
-                accent: '#42b983',
-                toogleBackground : '#ffffff',
-                background: '#091a28',
-                textColor: '#b4b4b4',
-                codeTextColor : '#ffffff',
-                codeBackgroundColor : '#0e2233',
-                borderColor : '#0d2538',
-                blockQuoteColor : '#858585',
-                highlightColor : '#d22778',
-                sidebarSublink : '#b4b4b4',
-                codeTypeColor : '#ffffff',
-                coverBackground : 'linear-gradient(to left bottom, hsl(118, 100%, 85%) 0%,hsl(181, 100%, 85%) 100%)',
+                accent: '#d98b7f',
+                toogleBackground : '#e8e2d6',
+                background: '#17150f',
+                textColor: '#e8e2d6',
+                codeTextColor : '#f2ecdf',
+                codeBackgroundColor : '#241f17',
+                borderColor : '#3a352b',
+                blockQuoteColor : '#a49b8c',
+                highlightColor : '#d98b7f',
+                sidebarSublink : '#a49b8c',
+                codeTypeColor : '#c9a86a',
+                coverBackground : 'linear-gradient(135deg, #17150f 0%, #241f16 60%, #2c2418 100%)',
                 toogleImage : 'url(https://cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/icons/sun.svg)'
             },
             light: {
-                accent: '#42b983',
-                toogleBackground : '#091a28',
-                background: '#ffffff',
-                textColor: '#34495e',
-                codeTextColor : '#525252',
-                codeBackgroundColor : '#f8f8f8',
-                borderColor : 'rgba(0, 0, 0, 0.07)',
-                blockQuoteColor : '#858585',
-                highlightColor : '#d22778',
-                sidebarSublink : '#b4b4b4',
-                codeTypeColor : '#091a28',
-                coverBackground : 'linear-gradient(to left bottom, hsl(118, 100%, 85%) 0%,hsl(181, 100%, 85%) 100%)',
+                accent: '#8c2f39',
+                toogleBackground : '#2a2620',
+                background: '#f7f4ed',
+                textColor: '#2a2620',
+                codeTextColor : '#2a2620',
+                codeBackgroundColor : '#f1ece1',
+                borderColor : '#e5e0d5',
+                blockQuoteColor : '#7a7368',
+                highlightColor : '#8c2f39',
+                sidebarSublink : '#7a7368',
+                codeTypeColor : '#8c6f4a',
+                coverBackground : 'linear-gradient(135deg, #f7f4ed 0%, #efe7d8 55%, #e6d9c3 100%)',
                 toogleImage : 'url(https://cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/icons/moon.svg)'
             }
         },
@@ -132,7 +136,7 @@
             strict: "0",
             emitMetadata: "0",
             inputPosition: "bottom",
-            theme: "light",
+            theme: "preferred_color_scheme",
             lang: "zh-CN",
             loading: "lazy",
             crossorigin:"anonymous"

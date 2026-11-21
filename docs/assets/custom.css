@@ -1,0 +1,497 @@
+/* ============================================================
+   站点统一视觉：宣纸 / 墨 / 朱砂
+   与 /sites.html、/book-wiki/ 等子站点保持同一套配色与圆角
+   颜色尽量引用 docsify-darklight-theme 注入的变量，自动适配明暗
+   ============================================================ */
+
+:root {
+    --theme-color: var(--accent, #8c2f39);
+    --base-color: var(--textColor, #2a2620);
+    --base-background: var(--background, #f7f4ed);
+    --base-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --base-font-size: 16px;
+    --content-max-width: 880px;
+    --sidebar-width: 286px;
+
+    --cj-bg: var(--background, #f7f4ed);
+    --cj-text: var(--textColor, #2a2620);
+    --cj-muted: var(--blockQuoteColor, #7a7368);
+    --cj-faint: var(--sidebarSublink, #8a8173);
+    --cj-line: var(--borderColor, #e5e0d5);
+    --cj-accent: var(--accent, #8c2f39);
+    --cj-surface: color-mix(in srgb, var(--cj-bg) 92%, var(--cj-text) 8%);
+    --cj-soft: color-mix(in srgb, var(--cj-accent) 10%, transparent);
+    --cj-radius: 14px;
+    --cj-shadow: 0 18px 44px color-mix(in srgb, var(--cj-text) 14%, transparent);
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: var(--cj-bg) !important;
+    color: var(--cj-text) !important;
+    font-family: var(--base-font-family);
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: var(--cj-soft);
+    color: var(--cj-text);
+}
+
+/* ---------- 顶部导航 ---------- */
+
+.app-nav {
+    padding: 6px 18px;
+}
+
+.app-nav ul li a {
+    color: var(--cj-muted) !important;
+    font-size: calc(13.5px * 1);
+    font-weight: 500;
+    transition: color 0.18s ease;
+}
+
+.app-nav ul li a:hover,
+.app-nav ul li.active > a {
+    color: var(--cj-accent) !important;
+}
+
+.app-nav ul li ul {
+    min-width: 190px;
+    padding: 6px !important;
+    border: 1px solid var(--cj-line) !important;
+    border-radius: 12px !important;
+    background: var(--cj-bg) !important;
+    box-shadow: var(--cj-shadow) !important;
+}
+
+.app-nav ul li ul li a {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.app-nav ul li ul li a:hover {
+    background: var(--cj-soft);
+    color: var(--cj-accent) !important;
+}
+
+/* ---------- 侧边栏 ---------- */
+
+.sidebar {
+    padding: 26px 16px 40px;
+    border-right: 1px solid var(--cj-line);
+    background: var(--cj-bg) !important;
+}
+
+.sidebar .app-name {
+    margin-bottom: 18px;
+    padding: 0 8px;
+}
+
+.sidebar .app-name-link {
+    color: var(--cj-text) !important;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.sidebar-nav {
+    font-size: 13.5px;
+}
+
+.sidebar-nav ul {
+    margin: 2px 0;
+}
+
+.sidebar-nav li {
+    margin: 1px 0;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: var(--cj-faint);
+    font-weight: 400;
+    transition: background 0.16s ease, color 0.16s ease;
+}
+
+.sidebar-nav a:hover {
+    background: var(--cj-soft);
+    color: var(--cj-accent);
+    text-decoration: none;
+}
+
+.sidebar-nav li.active > a {
+    background: var(--cj-soft);
+    color: var(--cj-accent);
+    font-weight: 600;
+}
+
+.sidebar-nav li > p {
+    margin: 18px 0 4px;
+    padding: 0 10px;
+    color: var(--cj-faint);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.sidebar-nav li > p strong {
+    font-weight: 600;
+}
+
+/* 搜索框 */
+
+.sidebar .search {
+    margin: 0 0 14px;
+    padding: 0 4px;
+}
+
+.sidebar .search input {
+    width: 100%;
+    padding: 9px 14px;
+    border: 1px solid var(--cj-line);
+    border-radius: 999px;
+    background: var(--cj-surface);
+    color: var(--cj-text);
+    font-size: 13px;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.sidebar .search input::placeholder {
+    color: var(--cj-faint);
+}
+
+.sidebar .search input:focus {
+    outline: none;
+    border-color: var(--cj-accent);
+    box-shadow: 0 0 0 3px var(--cj-soft);
+}
+
+.sidebar .search .results-panel {
+    margin-top: 8px;
+    border: 1px solid var(--cj-line);
+    border-radius: 12px;
+    background: var(--cj-bg);
+    box-shadow: var(--cj-shadow);
+}
+
+.sidebar .search .matching-post {
+    border-bottom: 1px solid var(--cj-line);
+}
+
+/* ---------- 正文 ---------- */
+
+.markdown-section {
+    max-width: var(--content-max-width);
+    padding: 48px 40px 80px;
+    color: inherit;
+}
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+    color: var(--cj-text);
+    letter-spacing: -0.015em;
+    font-weight: 700;
+}
+
+.markdown-section h1 {
+    margin: 0.2em 0 0.9em;
+    font-size: 2rem;
+}
+
+.markdown-section h2 {
+    margin-top: 2.2em;
+    padding-bottom: 0.45em;
+    border-bottom: 1px solid var(--cj-line);
+    font-size: 1.42rem;
+}
+
+.markdown-section h3 {
+    margin-top: 1.8em;
+    font-size: 1.14rem;
+}
+
+.markdown-section p,
+.markdown-section li {
+    line-height: 1.82;
+}
+
+.markdown-section a {
+    color: var(--cj-accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--cj-accent) 32%, transparent);
+    transition: border-color 0.16s ease;
+}
+
+.markdown-section a:hover {
+    border-bottom-color: var(--cj-accent);
+}
+
+.markdown-section blockquote {
+    margin: 1.4em 0;
+    padding: 14px 18px;
+    border-left: 3px solid var(--cj-accent);
+    border-radius: 0 10px 10px 0;
+    background: var(--cj-soft);
+    color: var(--cj-muted);
+}
+
+.markdown-section blockquote p {
+    margin: 0.2em 0;
+}
+
+.markdown-section hr {
+    margin: 2.6em 0;
+    border: none;
+    border-top: 1px solid var(--cj-line);
+}
+
+.markdown-section code {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: var(--codeBackgroundColor, var(--cj-surface));
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.88em;
+}
+
+.markdown-section pre {
+    margin: 1.3em 0;
+    border: 1px solid var(--cj-line);
+    border-radius: 12px;
+    background: var(--codeBackgroundColor, var(--cj-surface));
+    overflow: auto;
+}
+
+.markdown-section pre > code {
+    padding: 0;
+    background: transparent;
+}
+
+.markdown-section table {
+    display: table;
+    width: 100%;
+    border: 1px solid var(--cj-line);
+    border-radius: 12px;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+
+.markdown-section th {
+    background: var(--cj-surface);
+    font-weight: 600;
+    text-align: left;
+}
+
+.markdown-section th,
+.markdown-section td {
+    padding: 9px 14px;
+    border: none;
+    border-bottom: 1px solid var(--cj-line);
+}
+
+.markdown-section tr:last-child td {
+    border-bottom: none;
+}
+
+.markdown-section img {
+    border-radius: 12px;
+}
+
+/* ---------- 封面 ---------- */
+
+section.cover {
+    background: var(--coverBackground, var(--cj-bg)) !important;
+}
+
+section.cover .cover-main > h1 {
+    color: var(--cj-text);
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.03em;
+}
+
+section.cover .cover-main > p {
+    color: var(--cj-muted);
+}
+
+section.cover .cover-main > p:last-child a {
+    margin: 6px;
+    padding: 11px 26px;
+    border: 1px solid var(--cj-accent);
+    border-radius: 999px;
+    background: var(--cj-accent);
+    color: #fff;
+    font-weight: 600;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+section.cover .cover-main > p:last-child a:last-child {
+    background: transparent;
+    color: var(--cj-accent);
+}
+
+section.cover .cover-main > p:last-child a:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+/* ---------- 右侧目录（docsify-toc） ---------- */
+
+.page_toc {
+    padding-left: 22px;
+    border-left: 1px solid var(--cj-line);
+    font-size: 12.5px;
+}
+
+.page_toc .title {
+    color: var(--cj-faint);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.page_toc .nav a {
+    color: var(--cj-faint);
+    border-bottom: none;
+}
+
+.page_toc .nav a:hover,
+.page_toc .anchor.active {
+    color: var(--cj-accent);
+}
+
+.page_toc .nav > li > a {
+    padding: 3px 0;
+}
+
+/* ---------- 插件：字数、分享、分页、页脚、评论 ---------- */
+
+.countable,
+.count {
+    color: var(--cj-faint) !important;
+    font-size: 12px !important;
+}
+
+.share-button,
+.share-slide-bar {
+    opacity: 0.62;
+    transition: opacity 0.18s ease;
+}
+
+.share-button:hover,
+.share-slide-bar:hover {
+    opacity: 1;
+}
+
+.docsify-pagination-container {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--cj-line);
+}
+
+.pagination-item {
+    border-radius: 10px;
+    transition: background 0.16s ease;
+}
+
+.pagination-item:hover {
+    background: var(--cj-soft);
+}
+
+.pagination-item-label,
+.pagination-item-subtitle {
+    color: var(--cj-faint);
+}
+
+.pagination-item-title {
+    color: var(--cj-text);
+}
+
+.footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--cj-line);
+    color: var(--cj-faint);
+    font-size: 13px;
+}
+
+.footer a {
+    color: var(--cj-muted);
+    border-bottom: none;
+}
+
+.giscus,
+.giscus-frame {
+    margin-top: 34px;
+    border-radius: var(--cj-radius);
+    overflow: hidden;
+}
+
+button.docsify-copy-code-button {
+    border: 1px solid var(--cj-line);
+    border-radius: 8px;
+    background: var(--cj-surface);
+    color: var(--cj-muted);
+}
+
+/* ---------- 主题切换按钮 ---------- */
+
+.darklightTheme,
+[class*="darklight"] button,
+button[class*="darklight"] {
+    border-radius: 999px;
+}
+
+/* ---------- 滚动条 ---------- */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--cj-text) 22%, transparent);
+    background-clip: content-box;
+}
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 1100px) {
+    .page_toc {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .markdown-section {
+        padding: 32px 20px 64px;
+    }
+
+    .app-nav {
+        padding: 6px 10px;
+    }
+
+    section.cover .cover-main > p:last-child a {
+        padding: 10px 20px;
+    }
+}
