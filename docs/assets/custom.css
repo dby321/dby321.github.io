@@ -875,3 +875,124 @@ body.cj-nav-collapsed #cj-nav-toggle span:nth-child(3) {
 .sidebar-nav li.cj-collapsed > ul {
     display: none;
 }
+
+/* ---------- 文章分享条 ---------- */
+
+.cj-share {
+    margin: 44px 0 12px;
+    padding: 20px 22px;
+    border: 1px solid var(--cj-line);
+    border-radius: 16px;
+    background: var(--cj-surface);
+}
+
+.cj-share__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    margin-bottom: 14px;
+}
+
+.cj-share__title {
+    color: var(--cj-text);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.cj-share__hint {
+    color: var(--cj-faint);
+    font-size: 12px;
+}
+
+.cj-share__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cj-share__btn {
+    appearance: none;
+    padding: 6px 13px;
+    border: 1px solid var(--cj-line);
+    border-radius: 999px;
+    background: var(--cj-bg);
+    color: var(--cj-muted);
+    font-family: inherit;
+    font-size: 12.5px;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: border-color 0.16s ease, color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+}
+
+.cj-share__btn:hover {
+    border-color: var(--brand, var(--cj-accent));
+    background: color-mix(in srgb, var(--brand, var(--cj-accent)) 9%, transparent);
+    color: var(--brand, var(--cj-accent));
+    transform: translateY(-1px);
+}
+
+.cj-share__btn:focus-visible {
+    outline: none;
+    border-color: var(--brand, var(--cj-accent));
+    box-shadow: 0 0 0 3px var(--cj-soft);
+}
+
+.cj-share__btn.is-done {
+    border-color: #07c160;
+    color: #07c160;
+}
+
+.cj-share__btn[data-share="wechat"] {
+    --brand: #07c160;
+}
+
+.cj-share__btn[data-share="weibo"] {
+    --brand: #e6162d;
+}
+
+.cj-share__btn[data-share="x"] {
+    --brand: var(--cj-text);
+}
+
+.cj-share__btn[data-share="telegram"] {
+    --brand: #229ed9;
+}
+
+.cj-share__btn[data-share="facebook"] {
+    --brand: #1877f2;
+}
+
+.cj-share__btn[data-share="linkedin"] {
+    --brand: #0a66c2;
+}
+
+.cj-share__btn[data-share="reddit"] {
+    --brand: #ff4500;
+}
+
+.cj-share__btn[data-share="copy"] {
+    --brand: var(--cj-accent);
+}
+
+.cj-share__toast {
+    min-height: 1.2em;
+    margin: 10px 0 0;
+    color: var(--cj-accent);
+    font-size: 12px;
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.cj-share__toast.is-show {
+    opacity: 1;
+    transform: none;
+}
+
+@media print {
+    .cj-share {
+        display: none;
+    }
+}

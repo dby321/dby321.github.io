@@ -69,14 +69,6 @@
             crossChapter: true,
             crossChapterText: true
         },
-        share: {
-            reddit: true,
-            linkedin: true,
-            facebook: true,
-            twitter: true,
-            whatsapp: true,
-            telegram: true
-        },
         // 字数插件
         count:{
             countable: true,
@@ -163,8 +155,6 @@
 <script src="https://unpkg.com/docsify/lib/plugins/search.min.js"></script>
 <!-- 分页导航 -->
 <script src="https://unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
-<!--分享插件-->
-<script src="https://unpkg.com/docsify-share/build/index.min.js"></script>
 <!--字数统计-->
 <script src="https://unpkg.com/docsify-count/dist/countable.min.js"></script>
 <!--代码复制-->
@@ -303,6 +293,140 @@
         });
         bodyObserver.observe(document.body, {childList: true, subtree: true});
         applyGroups();
+    })();
+</script>
+<script>
+    // 文章末尾的分享条：不依赖第三方分享插件
+    (function () {
+        function encode(value) {
+            return encodeURIComponent(value);
+        }
+
+        function shareUrl(kind, url, title) {
+            switch (kind) {
+                case 'weibo':
+                    return 'https://service.weibo.com/share/share.php?url=' + encode(url) + '&title=' + encode(title);
+                case 'x':
+                    return 'https://twitter.com/intent/tweet?url=' + encode(url) + '&text=' + encode(title);
+                case 'telegram':
+                    return 'https://t.me/share/url?url=' + encode(url) + '&text=' + encode(title);
+                case 'facebook':
+                    return 'https://www.facebook.com/sharer/sharer.php?u=' + encode(url);
+                case 'linkedin':
+                    return 'https://www.linkedin.com/sharing/share-offsite/?url=' + encode(url);
+                case 'reddit':
+                    return 'https://www.reddit.com/submit?url=' + encode(url) + '&title=' + encode(title);
+                default:
+                    return '';
+            }
+        }
+
+        function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text);
+            }
+            return new Promise(function (resolve, reject) {
+                var area = document.createElement('textarea');
+                area.value = text;
+                area.setAttribute('readonly', '');
+                area.style.position = 'fixed';
+                area.style.top = '-9999px';
+                document.body.appendChild(area);
+                area.select();
+                try {
+                    document.execCommand('copy') ? resolve() : reject(new Error('copy failed'));
+                } catch (err) {
+                    reject(err);
+                } finally {
+                    document.body.removeChild(area);
+                }
+            });
+        }
+
+        var toastTimer = null;
+
+        function toast(block, message) {
+            var el = block.querySelector('.cj-share__toast');
+            if (!el) return;
+            el.textContent = message;
+            el.classList.add('is-show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () {
+                el.classList.remove('is-show');
+            }, 2800);
+        }
+
+        function build() {
+            var section = document.querySelector('.markdown-section');
+            if (!section || section.querySelector('.cj-share')) return;
+
+            var url = window.location.href;
+            var title = document.title;
+            var block = document.createElement('section');
+            block.className = 'cj-share';
+            block.setAttribute('aria-label', '分享这篇文章');
+            block.innerHTML =
+                '<div class="cj-share__head">' +
+                '<span class="cj-share__title">分享这篇文章</span>' +
+                '<span class="cj-share__hint">把这篇笔记发给同样在学的人</span>' +
+                '</div>' +
+                '<div class="cj-share__list">' +
+                '<button class="cj-share__btn" type="button" data-share="wechat">微信</button>' +
+                '<button class="cj-share__btn" type="button" data-share="weibo">微博</button>' +
+                '<button class="cj-share__btn" type="button" data-share="x">X</button>' +
+                '<button class="cj-share__btn" type="button" data-share="telegram">Telegram</button>' +
+                '<button class="cj-share__btn" type="button" data-share="facebook">Facebook</button>' +
+                '<button class="cj-share__btn" type="button" data-share="linkedin">LinkedIn</button>' +
+                '<button class="cj-share__btn" type="button" data-share="reddit">Reddit</button>' +
+                '<button class="cj-share__btn" type="button" data-share="copy">复制链接</button>' +
+                '</div>' +
+                '<p class="cj-share__toast" role="status" aria-live="polite"></p>';
+
+            var anchor = section.querySelector('.giscus, .docsify-pagination-container');
+            if (anchor) section.insertBefore(block, anchor);
+            else section.appendChild(block);
+
+            block.addEventListener('click', function (e) {
+                var btn = e.target.closest('.cj-share__btn');
+                if (!btn) return;
+                var kind = btn.getAttribute('data-share');
+
+                if (kind === 'wechat' || kind === 'copy') {
+                    copyText(url).then(
+                        function () {
+                            if (kind === 'wechat') {
+                                toast(block, '链接已复制，打开微信粘贴给朋友');
+                                return;
+                            }
+                            var original = btn.textContent;
+                            btn.textContent = '已复制';
+                            btn.classList.add('is-done');
+                            setTimeout(function () {
+                                btn.textContent = original;
+                                btn.classList.remove('is-done');
+                            }, 1800);
+                        },
+                        function () {
+                            toast(block, '复制失败，请手动复制地址栏链接');
+                        },
+                    );
+                    return;
+                }
+
+                var href = shareUrl(kind, url, title);
+                if (href) window.open(href, '_blank', 'noopener,noreferrer,width=640,height=560');
+            });
+        }
+
+        var timer = null;
+        new MutationObserver(function () {
+            if (timer) return;
+            timer = setTimeout(function () {
+                timer = null;
+                build();
+            }, 200);
+        }).observe(document.body, {childList: true, subtree: true});
+        build();
     })();
 </script>
 </body>
