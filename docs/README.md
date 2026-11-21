@@ -1,4 +1,14 @@
 # navigation
+
+## 在线站点
+
+> 笔记之外，还有几个可以交互的静态站点，已统一部署在本域名下。
+
+- [**站点导航**](https://dby321.github.io/sites.html) — 全部子站点入口
+- [**书籍百科 · 人物关系图谱**](https://dby321.github.io/book-wiki/) — 六本书、544 位人物、954 条关系
+- [**国内二次元游戏厂商图谱**](https://dby321.github.io/anime-games/) — 厂商与产品线对照
+- [**山姆购物指南**](https://dby321.github.io/sam-guide/) — 买什么最划算
+
 - [首页](README.md)
 - **编程语言**
   - [Java笔记](md/Java笔记.md)
