@@ -495,3 +495,383 @@ button[class*="darklight"] {
         padding: 10px 20px;
     }
 }
+
+/* ---------- 主题切换按钮：右下角悬浮，避开顶部导航与 GitHub 角标 ---------- */
+
+#docsify-darklight-theme {
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    left: auto !important;
+    top: auto !important;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--cj-line);
+    border-radius: 50%;
+    background-color: var(--cj-surface);
+    background-size: 18px 18px;
+    background-position: center;
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--cj-text) 18%, transparent);
+    z-index: 30;
+    opacity: 0.92;
+    transition: opacity 0.16s ease, transform 0.16s ease, border-color 0.16s ease;
+}
+
+#docsify-darklight-theme:hover {
+    opacity: 1;
+    border-color: var(--cj-accent);
+    transform: translateY(-2px);
+}
+
+#docsify-darklight-theme p {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #docsify-darklight-theme {
+        right: 14px;
+        bottom: 14px;
+        width: 34px;
+        height: 34px;
+        background-size: 16px 16px;
+    }
+}
+
+/* ---------- 搜索栏精修 ---------- */
+
+/* 搜索插件运行时会把 .sidebar 的 padding-top 清零，这里强制恢复 */
+.sidebar {
+    padding-top: 24px !important;
+}
+
+.sidebar .search {
+    position: relative;
+    margin: 0 0 18px;
+    padding: 0;
+    border-bottom: 0;
+}
+
+.sidebar .search .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cj-line);
+    border-radius: 12px;
+    background: var(--cj-surface);
+    transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.sidebar .search .input-wrap::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translateY(-50%);
+    background: no-repeat center / contain
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8173' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.sidebar .search .input-wrap::after {
+    content: "/";
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    min-width: 17px;
+    padding: 1px 4px;
+    transform: translateY(-50%);
+    border: 1px solid var(--cj-line);
+    border-radius: 5px;
+    color: var(--cj-faint);
+    font-size: 10px;
+    line-height: 1.3;
+    text-align: center;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.sidebar .search .input-wrap:focus-within {
+    border-color: var(--cj-accent);
+    background: var(--cj-bg);
+    box-shadow: 0 0 0 3px var(--cj-soft);
+}
+
+.sidebar .search .input-wrap:focus-within::after {
+    display: none;
+}
+
+.sidebar .search input {
+    flex: 1;
+    width: 100%;
+    padding: 10px 34px 10px 36px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--cj-text);
+    font-size: 13.5px;
+}
+
+.sidebar .search input:focus {
+    border: 0;
+    box-shadow: none;
+}
+
+.sidebar .search input::placeholder {
+    color: var(--cj-faint);
+}
+
+.sidebar .search .clear-button {
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--cj-faint);
+    cursor: pointer;
+}
+
+.sidebar .search .clear-button.show {
+    display: flex;
+}
+
+.sidebar .search .clear-button:hover {
+    background: var(--cj-soft);
+    color: var(--cj-accent);
+}
+
+.sidebar .search .clear-button svg {
+    width: 13px;
+    height: 13px;
+    transform: none;
+}
+
+.sidebar .search .results-panel {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 8px);
+    z-index: 60;
+    display: none;
+    width: 340px;
+    max-width: min(340px, calc(100vw - 32px));
+    max-height: min(62vh, 460px);
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    border: 1px solid var(--cj-line);
+    border-radius: 14px;
+    background: var(--cj-bg);
+    box-shadow: var(--cj-shadow);
+}
+
+.sidebar .search .results-panel.show {
+    display: block;
+}
+
+.sidebar .search .matching-post {
+    border-bottom: 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.sidebar .search .matching-post + .matching-post {
+    margin-top: 2px;
+}
+
+.sidebar .search .matching-post a {
+    display: block;
+    padding: 9px 10px;
+    border-radius: 10px;
+    color: var(--cj-text);
+    text-decoration: none;
+}
+
+.sidebar .search .matching-post a:hover {
+    background: var(--cj-soft);
+    color: var(--cj-text);
+}
+
+.sidebar .search .matching-post h2 {
+    margin: 0 0 2px;
+    color: var(--cj-text);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.sidebar .search .matching-post p {
+    margin: 0;
+    color: var(--cj-muted);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.sidebar .search .search-keyword {
+    padding: 0 1px;
+    border-radius: 3px;
+    background: var(--cj-soft);
+    color: var(--cj-accent);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.sidebar .search p.empty {
+    margin: 0;
+    padding: 14px 8px;
+    color: var(--cj-faint);
+    font-size: 12.5px;
+    text-align: center;
+}
+
+/* ---------- 可折叠：侧边栏 / 顶部菜单 / 分组 ---------- */
+
+/* 顶部 GitHub 飘带与菜单按钮抢位置，且与整体风格不搭，收起 */
+.github-corner {
+    display: none !important;
+}
+
+/* 菜单按钮 */
+#cj-nav-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--cj-line);
+    border-radius: 50%;
+    background: var(--cj-surface);
+    color: var(--cj-accent);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--cj-text) 16%, transparent);
+    cursor: pointer;
+    transition: border-color 0.16s ease, opacity 0.16s ease;
+}
+
+#cj-nav-toggle:hover {
+    border-color: var(--cj-accent);
+}
+
+#cj-nav-toggle span {
+    display: block;
+    width: 15px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+body.cj-nav-collapsed #cj-nav-toggle span:nth-child(1) {
+    transform: translateY(5px) rotate(45deg);
+}
+
+body.cj-nav-collapsed #cj-nav-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+body.cj-nav-collapsed #cj-nav-toggle span:nth-child(3) {
+    transform: translateY(-5px) rotate(-45deg);
+}
+
+/* 菜单栏整体折叠 */
+.app-nav {
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+@media (min-width: 769px) {
+    .app-nav {
+        margin-right: 70px;
+    }
+
+    body.cj-nav-collapsed .app-nav {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-6px);
+    }
+
+    #cj-nav-toggle {
+        display: flex;
+    }
+}
+
+/* 侧栏整体折叠：把 docsify 原生的透明底栏改成圆形按钮 */
+@media (min-width: 769px) {
+    .sidebar-toggle {
+        position: fixed !important;
+        left: 16px !important;
+        bottom: 16px !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        width: 38px !important;
+        height: 38px !important;
+        padding: 0 !important;
+        border: 1px solid var(--cj-line) !important;
+        border-radius: 50% !important;
+        background: var(--cj-surface) !important;
+        box-shadow: 0 10px 26px color-mix(in srgb, var(--cj-text) 16%, transparent);
+        opacity: 0.92;
+        z-index: 35;
+        transition: opacity 0.16s ease, border-color 0.16s ease;
+    }
+
+    .sidebar-toggle:hover {
+        opacity: 1;
+        border-color: var(--cj-accent) !important;
+    }
+
+    .sidebar-toggle span {
+        width: 15px !important;
+        height: 2px !important;
+        margin: 0 !important;
+        border-radius: 2px;
+        background: var(--cj-accent) !important;
+    }
+}
+
+/* 侧栏分组折叠 */
+.sidebar-nav li.cj-group > p,
+.sidebar-nav li.cj-group > strong {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sidebar-nav li.cj-group > p::after,
+.sidebar-nav li.cj-group > strong::after {
+    content: "▾";
+    font-size: 10px;
+    line-height: 1;
+    opacity: 0.55;
+    transition: transform 0.18s ease;
+}
+
+.sidebar-nav li.cj-group.cj-collapsed > p::after,
+.sidebar-nav li.cj-group.cj-collapsed > strong::after {
+    transform: rotate(-90deg);
+}
+
+.sidebar-nav li.cj-collapsed > ul {
+    display: none;
+}

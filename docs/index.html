@@ -20,7 +20,20 @@
     <link rel="stylesheet" href="assets/custom.css">
 </head>
 <body>
+<script>
+    (function () {
+        try {
+            if (window.innerWidth > 768) {
+                if (localStorage.getItem('cj-sidebar-collapsed') === '1') document.body.classList.add('close');
+                if (localStorage.getItem('cj-nav-collapsed') === '1') document.body.classList.add('cj-nav-collapsed');
+            }
+        } catch (e) {}
+    })();
+</script>
 <div id="app"></div>
+<button id="cj-nav-toggle" type="button" aria-label="折叠菜单" aria-expanded="true" title="折叠菜单">
+    <span></span><span></span><span></span>
+</button>
 
 
 
@@ -30,8 +43,8 @@
         search: {
             maxAge: 86400000, // 索引缓存的最大年龄（毫秒）
             paths: 'auto', // 自动索引所有路径
-            placeholder: '=>请搜索...😊', // 搜索框占位符文本
-            noData: '你在搜什么鸟玩意,这里没有/(ㄒoㄒ)/~~', // 当没有匹配结果时显示的文本
+            placeholder: '搜索笔记、章节…', // 搜索框占位符文本
+            noData: '没有找到相关笔记，换个关键词试试。', // 当没有匹配结果时显示的文本
             depth: 3 // 搜索深度
         },
         // 移动设备合并导航栏到侧边栏
@@ -170,5 +183,127 @@
 <script src="https://unpkg.com/docsify-giscus@1.0.0/dist/docsify-giscus.min.js"></script>
 
 
+<script>
+    // 搜索快捷键：/ 或 Ctrl/Cmd + K 聚焦搜索框，Esc 清空并退出
+    (function () {
+        function searchInput() {
+            return document.querySelector('.sidebar .search input');
+        }
+        document.addEventListener('keydown', function (e) {
+            var el = e.target;
+            var tag = ((el && el.tagName) || '').toLowerCase();
+            if (tag === 'input' || tag === 'textarea' || (el && el.isContentEditable)) return;
+            var slash = e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey;
+            var cmdK = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k';
+            if (!slash && !cmdK) return;
+            var input = searchInput();
+            if (!input) return;
+            e.preventDefault();
+            input.focus();
+            input.select();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            var input = searchInput();
+            if (!input || document.activeElement !== input) return;
+            input.value = '';
+            input.dispatchEvent(new Event('input', {bubbles: true}));
+            input.blur();
+        });
+    })();
+</script>
+<script>
+    // 菜单栏、侧栏与侧栏分组的折叠状态
+    (function () {
+        var navBtn = document.getElementById('cj-nav-toggle');
+
+        function syncNav() {
+            if (!navBtn) return;
+            var collapsed = document.body.classList.contains('cj-nav-collapsed');
+            navBtn.setAttribute('aria-expanded', String(!collapsed));
+            navBtn.setAttribute('title', collapsed ? '展开菜单' : '折叠菜单');
+        }
+
+        if (navBtn) {
+            navBtn.addEventListener('click', function () {
+                var collapsed = document.body.classList.toggle('cj-nav-collapsed');
+                try {
+                    localStorage.setItem('cj-nav-collapsed', collapsed ? '1' : '0');
+                } catch (e) {}
+                syncNav();
+            });
+            syncNav();
+        }
+
+        // 侧栏整体折叠复用 docsify 的 .sidebar-toggle + body.close
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.sidebar-toggle') || window.innerWidth <= 768) return;
+            setTimeout(function () {
+                try {
+                    localStorage.setItem('cj-sidebar-collapsed', document.body.classList.contains('close') ? '1' : '0');
+                } catch (err) {}
+            }, 0);
+        });
+
+        // 侧栏分组折叠
+        var GROUPS_KEY = 'cj-sidebar-groups';
+
+        function savedGroups() {
+            try {
+                return JSON.parse(localStorage.getItem(GROUPS_KEY) || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveGroups(list) {
+            try {
+                localStorage.setItem(GROUPS_KEY, JSON.stringify(list));
+            } catch (e) {}
+        }
+
+        function labelOf(li) {
+            var el = li.querySelector(':scope > p') || li.querySelector(':scope > strong');
+            return el ? el.textContent.trim() : '';
+        }
+
+        function applyGroups() {
+            var list = savedGroups();
+            document.querySelectorAll('.sidebar-nav li').forEach(function (li) {
+                var label = li.querySelector(':scope > p') || li.querySelector(':scope > strong');
+                var sub = li.querySelector(':scope > ul');
+                if (!label || !sub) return;
+                li.classList.add('cj-group');
+                li.classList.toggle('cj-collapsed', list.indexOf(labelOf(li)) !== -1);
+            });
+        }
+
+        document.addEventListener('click', function (e) {
+            var label = e.target.closest('.sidebar-nav li > p, .sidebar-nav li > strong');
+            if (!label) return;
+            var li = label.parentElement;
+            if (!li || !li.querySelector(':scope > ul')) return;
+            e.preventDefault();
+            var collapsed = li.classList.toggle('cj-collapsed');
+            var name = labelOf(li);
+            var list = savedGroups();
+            var i = list.indexOf(name);
+            if (collapsed && i < 0) list.push(name);
+            if (!collapsed && i >= 0) list.splice(i, 1);
+            saveGroups(list);
+        });
+
+        var groupTimer = null;
+        var bodyObserver = new MutationObserver(function () {
+            if (groupTimer) return;
+            groupTimer = setTimeout(function () {
+                groupTimer = null;
+                applyGroups();
+            }, 150);
+        });
+        bodyObserver.observe(document.body, {childList: true, subtree: true});
+        applyGroups();
+    })();
+</script>
 </body>
 </html>
