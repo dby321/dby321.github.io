@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>站点导航 · 千里水草</title>
+    <meta name="description" content="千里水草的个人站点导航：书籍人物关系图谱、国内二次元游戏厂商图谱、山姆购物指南。"/>
+    <style>
+        :root {
+            --bg: #f7f4ed;
+            --surface: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e0d5;
+            --accent: #8c2f39;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 0%, #fffdf8 0%, var(--bg) 55%, #efe9dd 100%);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.7;
+        }
+        main { max-width: 880px; margin: 0 auto; padding: 72px 24px 96px; }
+        .eyebrow { font-size: 13px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; }
+        h1 { font-size: clamp(28px, 5vw, 42px); margin: 12px 0 16px; letter-spacing: -.02em; }
+        .lede { margin: 0 0 40px; color: var(--muted); max-width: 46em; }
+        .grid { display: grid; gap: 16px; }
+        .card {
+            display: block;
+            padding: 24px 26px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: var(--surface);
+            color: inherit;
+            text-decoration: none;
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+        .card:hover { transform: translateY(-2px); border-color: #d8cfc0; box-shadow: 0 14px 30px rgba(60, 45, 30, .08); }
+        .card h2 { margin: 0 0 6px; font-size: 20px; }
+        .card p { margin: 0; color: var(--muted); font-size: 14.5px; }
+        .card .path { display: inline-block; margin-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; color: var(--accent); }
+        footer { margin-top: 48px; font-size: 13px; color: var(--muted); }
+        footer a { color: inherit; }
+    </style>
+</head>
+<body>
+<main>
+    <p class="eyebrow">Site Index</p>
+    <h1>站点导航</h1>
+    <p class="lede">同一域名下的几个独立站点。每个站点都是纯静态构建，可以直接打开阅读。</p>
+
+    <div class="grid">
+        <a class="card" href="/book-wiki/">
+            <h2>书籍百科 · 人物关系图谱</h2>
+            <p>六本书、544 位人物、954 条关系：思维导图与关系网络双视图，按势力、家族、代际分组。</p>
+            <span class="path">/book-wiki/</span>
+        </a>
+        <a class="card" href="/anime-games/">
+            <h2>国内二次元游戏厂商图谱</h2>
+            <p>厂商与产品线的对照卡片，按公司、赛道与代表作整理。</p>
+            <span class="path">/anime-games/</span>
+        </a>
+        <a class="card" href="/sam-guide/">
+            <h2>山姆购物指南</h2>
+            <p>山姆会员店买什么最划算：单页清单，按品类与性价比整理。</p>
+            <span class="path">/sam-guide/</span>
+        </a>
+    </div>
+
+    <footer>
+        返回 <a href="/">千里水草的个人博客</a> · 站点由 GitHub Pages 托管
+    </footer>
+</main>
+</body>
+</html>

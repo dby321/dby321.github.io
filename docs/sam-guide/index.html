@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山姆购物指南 · 买什么最划算</title>
+    <style>
+        :root {
+            --blue: #0071ce;
+            --blue-dark: #004c91;
+            --green: #00843d;
+            --bg: #f4f7fa;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --gold: #f59e0b;
+            --radius: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6
+        }
+
+        a {
+            color: var(--blue)
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+            color: #fff;
+            padding: 48px 20px 40px;
+            text-align: center
+        }
+
+        header h1 {
+            font-size: 2rem;
+            letter-spacing: 1px
+        }
+
+        header p {
+            opacity: .9;
+            margin-top: 8px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px
+        }
+
+        .hero-stats div {
+            background: rgba(255, 255, 255, .14);
+            border-radius: 12px;
+            padding: 10px 22px
+        }
+
+        .hero-stats b {
+            display: block;
+            font-size: 1.3rem
+        }
+
+        .hero-stats span {
+            font-size: .8rem;
+            opacity: .85
+        }
+
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(255, 255, 255, .95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 20px
+        }
+
+        .toolbar-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1
+        }
+
+        .chip {
+            border: 1px solid #d1d5db;
+            background: #fff;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: .85rem;
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .chip:hover {
+            border-color: var(--blue);
+            color: var(--blue)
+        }
+
+        .chip.active {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff
+        }
+
+        .toolbar input, .toolbar select {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: .85rem;
+            outline: none
+        }
+
+        .toolbar input:focus {
+            border-color: var(--blue)
+        }
+
+        .toolbar input {
+            width: 180px
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 20px 60px
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin: 28px 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: .85rem;
+            margin-bottom: 14px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+            gap: 14px
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            transition: .15s
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .1)
+        }
+
+        .card .emoji {
+            font-size: 1.8rem
+        }
+
+        .card h3 {
+            font-size: 1rem
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: .68rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 600
+        }
+
+        .badge.king {
+            background: #fef3c7;
+            color: #b45309
+        }
+
+        .badge.hot {
+            background: #fee2e2;
+            color: #b91c1c
+        }
+
+        .badge.mm {
+            background: #dbeafe;
+            color: #1d4ed8
+        }
+
+        .price {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--blue-dark)
+        }
+
+        .price small {
+            font-size: .75rem;
+            color: var(--muted);
+            font-weight: 400
+        }
+
+        .unit {
+            font-size: .78rem;
+            color: var(--green);
+            font-weight: 600
+        }
+
+        .stars {
+            color: var(--gold);
+            font-size: .85rem;
+            letter-spacing: 2px
+        }
+
+        .stars .dim {
+            color: #e5e7eb
+        }
+
+        .desc {
+            font-size: .82rem;
+            color: var(--muted)
+        }
+
+        .cat-tag {
+            font-size: .7rem;
+            color: var(--muted);
+            margin-top: auto
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 40px 0;
+            display: none
+        }
+
+        .tips {
+            display: grid;
+            grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
+            margin-top: 14px
+        }
+
+        .tip {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 18px;
+            border-left: 4px solid var(--blue);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06)
+        }
+
+        .tip h4 {
+            font-size: .95rem;
+            margin-bottom: 6px
+        }
+
+        .tip p {
+            font-size: .83rem;
+            color: var(--muted)
+        }
+
+        .tip.warn {
+            border-left-color: #ef4444
+        }
+
+        .member {
+            display: grid;
+            grid-template-columns:1fr 1fr;
+            gap: 14px;
+            margin-top: 14px
+        }
+
+        .member .plan {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06)
+        }
+
+        .member .plan.best {
+            border: 2px solid var(--blue)
+        }
+
+        .plan h4 {
+            font-size: 1rem
+        }
+
+        .plan .fee {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--blue-dark);
+            margin: 6px 0
+        }
+
+        .plan ul {
+            list-style: none;
+            font-size: .83rem;
+            color: var(--muted)
+        }
+
+        .plan li {
+            padding: 3px 0
+        }
+
+        .plan li::before {
+            content: "✓ ";
+            color: var(--green);
+            font-weight: 700
+        }
+
+        footer {
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            padding: 24px 20px;
+            font-size: .78rem;
+            color: var(--muted)
+        }
+
+        footer .inner {
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        footer ul {
+            margin: 8px 0 0 18px
+        }
+
+        @media (max-width: 640px) {
+            .member {
+                grid-template-columns:1fr
+            }
+
+            .toolbar input {
+                width: 100%
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🛒 山姆购物指南</h1>
+    <p>山姆卖什么？哪些最值得买？一份按品类整理的热门商品清单 + 单价换算 + 性价比评级，照着买不踩雷。</p>
+    <div class="hero-stats">
+        <div><b id="statCount">0</b><span>精选商品</span></div>
+        <div><b>7 大</b><span>品类覆盖</span></div>
+        <div><b>MM</b><span>自有品牌优先</span></div>
+    </div>
+</header>
+
+<div class="toolbar">
+    <div class="toolbar-inner">
+        <div class="chips" id="chips"></div>
+        <input type="search" id="search" placeholder="搜索商品，如：烤鸡">
+        <select id="sort">
+            <option value="default">默认排序</option>
+            <option value="value">性价比优先</option>
+            <option value="priceAsc">价格从低到高</option>
+        </select>
+    </div>
+</div>
+
+<main>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty">没有找到匹配的商品，换个关键词试试～</div>
+
+    <h2 class="section-title">💳 会员卡怎么选</h2>
+    <p class="section-sub">会员费是门槛，买对东西很快回本（价格以官方 App 为准）</p>
+    <div class="member">
+        <div class="plan">
+            <h4>普通会员</h4>
+            <div class="fee">¥260<small style="font-size:.8rem;font-weight:400">/年</small></div>
+            <ul>
+                <li>主卡 + 副卡各一张，可找人拼卡人均 ¥130</li>
+                <li>适合月消费 1000~3000 元的家庭</li>
+                <li>常买烤鸡、瑞士卷、牛奶等爆款，约 2 个月回本</li>
+            </ul>
+        </div>
+        <div class="plan best">
+            <h4>卓越会员 <span class="badge king" style="position:static">大家庭推荐</span></h4>
+            <div class="fee">¥680<small style="font-size:.8rem;font-weight:400">/年</small></div>
+            <ul>
+                <li>每消费 100 元返 2 元积分（2% 返利）</li>
+                <li>月消费 3000 元以上基本稳赚</li>
+                <li>附加免邮券、齿科等权益，适合囤货大户</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="section-title">💡 省钱攻略 & 避坑</h2>
+    <p class="section-sub">老会员总结的实战经验</p>
+    <div class="tips">
+        <div class="tip"><h4>🏷️ 认准 Member's Mark（MM）</h4>
+            <p>山姆自有品牌，同品质比大牌便宜 20%~30%。零食日用优先选 MM，贴牌大牌零食性价比一般。</p></div>
+        <div class="tip"><h4>🟡 黄标 = 特惠，🔴 红标 = 临期</h4>
+            <p>黄标是限时特惠；红标临期商品 3~5 折，多在冷藏柜底层或收银台附近，傍晚去捡漏纸巾、洗衣液最划算。</p></div>
+        <div class="tip"><h4>📅 关注会员日与极速达</h4>
+            <p>部分门店周三会员日有折扣；不想跑门店可用 App「极速达」，1 小时送达（烤鸡等现制品类仅门店有售）。</p></div>
+        <div class="tip"><h4>🧊 大包装回家就分装</h4>
+            <p>瑞士卷、麻薯、贝果冷冻保存，吃前复烤口感如初；牛排按顿真空分装冷冻，避免吃不完浪费。</p></div>
+        <div class="tip warn"><h4>⚠️ 独居/小家庭慎囤生鲜</h4>
+            <p>山姆包装普遍偏大，蔬果、烘焙容易吃不完。人少建议拼单合买，或只买耐储的日用品和冷冻品。</p></div>
+        <div class="tip warn"><h4>⚠️ 别为"便宜"冲动囤货</h4>
+            <p>单价低 ≠ 省钱，吃不完用不完就是浪费。先列清单再进店，只买消耗得掉的量。</p></div>
+    </div>
+</main>
+
+<footer>
+    <div class="inner">
+        <b>说明：</b>价格整理自 2025–2026 年公开攻略与探店分享，不同城市、时段价格会有浮动，请以山姆 App /
+        门店实时价格为准。性价比评级为综合网友口碑的主观参考。
+        <ul id="sources">
+            <li><a href="https://m.maigoo.com/top/0DMNNzgw.html" target="_blank">山姆十大必买美食（买购网）</a></li>
+            <li><a href="https://post.m.smzdm.com/p/arlv4wpw/"
+                   target="_blank">山姆好物推荐：性价比超高清单（什么值得买）</a></li>
+            <li><a href="https://post.m.smzdm.com/p/a7g3ne4g/"
+                   target="_blank">山姆会员年度必买清单大公开（什么值得买）</a></li>
+            <li><a href="https://post.m.smzdm.com/p/aqk98xlx/"
+                   target="_blank">山姆会员还值吗？家庭囤货党亲测（什么值得买）</a></li>
+            <li><a href="https://cj.sina.com.cn/articles/view/7880068415/1d5b04d3f06802aaii" target="_blank">2026
+                盒马山姆超市优惠攻略（新浪财经）</a></li>
+            <li><a href="https://m.dianping.com/ugcdetail/213121313?bizType=29&sceneType=0"
+                   target="_blank">山姆必囤清单（大众点评）</a></li>
+            <li><a href="https://zh.accio.com/business/%E5%B1%B1%E5%A7%86%E7%88%86%E6%AC%BE%E5%95%86%E5%93%81"
+                   target="_blank">山姆爆款商品必买清单（Accio）</a></li>
+            <li><a href="https://view.inews.qq.com/wxn/20260805A0732O00"
+                   target="_blank">北京第六家山姆来了！品质好物（腾讯新闻）</a></li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+    const CATS = ["全部", "烘焙甜品", "熟食速食", "生鲜肉蛋", "水果蔬菜", "零食饮品", "日用家居"];
+    const ITEMS = [
+        // 烘焙甜品
+        {
+            n: "原味伯爵瑞士卷",
+            e: "🍰",
+            c: "烘焙甜品",
+            p: "59.8~68元",
+            spec: "16块",
+            u: "约3.7~4.3元/块",
+            s: 5,
+            b: "king",
+            d: "山姆销量王，纯动物奶油+伯爵红茶双拼，冷冻后像冰淇淋。烘焙店同款单块要6~8元。"
+        },
+        {
+            n: "原味麻薯面包",
+            e: "🥯",
+            c: "烘焙甜品",
+            p: "29.8~35.8元",
+            spec: "24个",
+            u: "约1.2~1.5元/个",
+            s: 5,
+            b: "king",
+            d: "外脆里糯，黑芝麻香，几乎人手一盒。常温耐放，早餐配牛奶省时省力。"
+        },
+        {
+            n: "黄油可颂/牛角包",
+            e: "🥐",
+            c: "烘焙甜品",
+            p: "33.8元",
+            spec: "1盒",
+            u: "复烤后层次分明",
+            s: 4,
+            b: "",
+            d: "空气炸锅加热几分钟恢复酥脆，配咖啡就是完美早餐。"
+        },
+        {
+            n: "蔓越莓贝果",
+            e: "🥯",
+            c: "烘焙甜品",
+            p: "约3.4元/个",
+            spec: "袋装",
+            u: "低糖健康",
+            s: 4,
+            b: "",
+            d: "冷冻保存，复烤和刚出炉一样好吃，做三明治底胚很方便。"
+        },
+        {
+            n: "巴斯克芝士蛋糕",
+            e: "🧀",
+            c: "烘焙甜品",
+            p: "79.9元",
+            spec: "1个",
+            u: "多人分享装",
+            s: 4,
+            b: "hot",
+            d: "芝士味浓郁，口感绵密，下午茶或聚会都合适。"
+        },
+        {
+            n: "榴莲千层",
+            e: "🥞",
+            c: "烘焙甜品",
+            p: "约99元",
+            spec: "1个",
+            u: "纯果肉+动物奶油",
+            s: 4,
+            b: "hot",
+            d: "榴莲果肉给得实在，甜度适中，榴莲党闭眼入。"
+        },
+        {
+            n: "提拉米苏",
+            e: "🍮",
+            c: "烘焙甜品",
+            p: "88元",
+            spec: "1个",
+            u: "枕头大小",
+            s: 4,
+            b: "",
+            d: "可可粉微苦+马斯卡彭奶酪，层次丰富，适合多人分食。"
+        },
+        {
+            n: "MM蛋黄酥",
+            e: "🥮",
+            c: "烘焙甜品",
+            p: "42.8元",
+            spec: "12件",
+            u: "约3.6元/件",
+            s: 4,
+            b: "mm",
+            d: "酥皮松软，蛋黄沙沙，甜度适中，送礼自吃两相宜。"
+        },
+        {
+            n: "3磅水果蛋糕",
+            e: "🎂",
+            c: "烘焙甜品",
+            p: "99元",
+            spec: "3磅",
+            u: "生日蛋糕首选",
+            s: 4,
+            b: "",
+            d: "过生日买超划算，同尺寸蛋糕店价格普遍翻倍。"
+        },
+        // 熟食速食
+        {
+            n: "招牌美式烤鸡",
+            e: "🍗",
+            c: "熟食速食",
+            p: "39.8元",
+            spec: "整只",
+            u: "比快餐店还便宜",
+            s: 5,
+            b: "king",
+            d: "当天现烤，皮脆肉嫩多汁，出炉即抢空。注意：仅门店有售，线上买不到。"
+        },
+        {
+            n: "芝士牛肉卷",
+            e: "🌯",
+            c: "熟食速食",
+            p: "19.8~20元",
+            spec: "1根",
+            u: "皮薄馅足爆汁拉丝",
+            s: 5,
+            b: "hot",
+            d: "老网红，牛肉+芝士组合，冷吃热吃都过瘾，一根顶一顿。"
+        },
+        {
+            n: "安格斯牛肉芝士汉堡",
+            e: "🍔",
+            c: "熟食速食",
+            p: "89.9元",
+            spec: "6件",
+            u: "约15元/件",
+            s: 4,
+            b: "mm",
+            d: "无需解冻直接加热，肉厚多汁，比汉堡店便宜一半。"
+        },
+        {
+            n: "台式红烧牛肉面",
+            e: "🍜",
+            c: "熟食速食",
+            p: "69.9元",
+            spec: "3包",
+            u: "约23元/包",
+            s: 4,
+            b: "",
+            d: "还原度高，牛肉弹牙面条Q弹，懒人正餐首选。"
+        },
+        {
+            n: "卤牛腱/流沙包等速食",
+            e: "🥟",
+            c: "熟食速食",
+            p: "视单品而定",
+            spec: "袋装",
+            u: "加热即食",
+            s: 4,
+            b: "",
+            d: "卤牛腱、流沙包、飞鱼籽虾滑、车达爆浆肠，简单加热就能开饭。"
+        },
+        // 生鲜肉蛋
+        {
+            n: "澳洲谷饲牛排",
+            e: "🥩",
+            c: "生鲜肉蛋",
+            p: "约120元/公斤",
+            spec: "原切",
+            u: "约60元/斤",
+            s: 5,
+            b: "king",
+            d: "谷饲200天原切无添加，独立真空包装。同品质商超动辄百元/斤，省近一半。"
+        },
+        {
+            n: "挪威三文鱼刺身",
+            e: "🍣",
+            c: "生鲜肉蛋",
+            p: "时价",
+            spec: "厚切",
+            u: "日料店同款",
+            s: 4,
+            b: "hot",
+            d: "急冻锁鲜，肉质橙红厚实，在家实现日料自由，比日料店划算得多。"
+        },
+        {
+            n: "MM鲜鸡蛋",
+            e: "🥚",
+            c: "生鲜肉蛋",
+            p: "26.8元",
+            spec: "30枚",
+            u: "约0.9元/枚",
+            s: 5,
+            b: "mm",
+            d: "无抗生素，单价不到一块钱，家庭刚需回购王。"
+        },
+        {
+            n: "盐池滩羊肉",
+            e: "🍖",
+            c: "生鲜肉蛋",
+            p: "时价",
+            spec: "部位可选",
+            u: "几乎无膻味",
+            s: 4,
+            b: "",
+            d: "适合红烧、烤羊肉，怕膻味的人也能接受。"
+        },
+        {
+            n: "猪五花/五花肉片",
+            e: "🥓",
+            c: "生鲜肉蛋",
+            p: "67~78元",
+            spec: "大份装",
+            u: "烤肉红烧皆宜",
+            s: 4,
+            b: "",
+            d: "品质稳定，分装冷冻后随吃随取。"
+        },
+        {
+            n: "MM肥牛卷",
+            e: "🍲",
+            c: "生鲜肉蛋",
+            p: "45.8元",
+            spec: "大盒",
+            u: "火锅必备",
+            s: 4,
+            b: "mm",
+            d: "涮火锅性价比之选，量大实惠。"
+        },
+        // 水果蔬菜
+        {
+            n: "巴氏鲜牛奶",
+            e: "🥛",
+            c: "水果蔬菜",
+            p: "17.8~20.9元",
+            spec: "2L",
+            u: "约9元/L",
+            s: 5,
+            b: "king",
+            d: "欧盟标准，奶香浓，价格吊打外面超市。保质期7天需冷藏，做咖啡也棒。"
+        },
+        {
+            n: "智利车厘子（旺季）",
+            e: "🍒",
+            c: "水果蔬菜",
+            p: "低至29.9元/斤",
+            spec: "JJJ级",
+            u: "大果核小",
+            s: 4,
+            b: "hot",
+            d: "旺季价格非常能打，分量足，孩子老人都爱吃。"
+        },
+        {
+            n: "进口香蕉",
+            e: "🍌",
+            c: "水果蔬菜",
+            p: "19.9元",
+            spec: "一大把",
+            u: "高频回购",
+            s: 4,
+            b: "",
+            d: "便宜大碗，注意熟得快，买回来尽快吃。"
+        },
+        {
+            n: "糖心蜜薯",
+            e: "🍠",
+            c: "水果蔬菜",
+            p: "49.9元",
+            spec: "袋装",
+            u: "烤煮皆甜",
+            s: 4,
+            b: "",
+            d: "无限回购榜常客，空气炸锅烤一下流糖心。"
+        },
+        {
+            n: "泰国椰青/全球水果",
+            e: "🥥",
+            c: "水果蔬菜",
+            p: "时价",
+            spec: "产地直采",
+            u: "价格优势明显",
+            s: 4,
+            b: "",
+            d: "椰青、日本蜜瓜等进口水果，比水果店同品质便宜。"
+        },
+        // 零食饮品
+        {
+            n: "MM混合坚果",
+            e: "🥜",
+            c: "零食饮品",
+            p: "109.9~139.9元",
+            spec: "750g~1.13kg",
+            u: "约0.12~0.15元/g",
+            s: 5,
+            b: "king",
+            d: "腰果巴旦木榛子核桃配比，颗颗饱满无坏果，有无盐版，比小包装划算太多。"
+        },
+        {
+            n: "小青柠汁",
+            e: "🍋",
+            c: "零食饮品",
+            p: "32.8~49.9元",
+            spec: "8瓶",
+            u: "火锅解腻神器",
+            s: 5,
+            b: "hot",
+            d: "新鲜压榨酸甜爽口，先酸后甜，火锅烧烤必带。"
+        },
+        {
+            n: "蒜味虾片",
+            e: "🦐",
+            c: "零食饮品",
+            p: "29.8元",
+            spec: "1大袋",
+            u: "虾肉含量13%",
+            s: 4,
+            b: "hot",
+            d: "真虾肉，蒜香浓郁，追剧零食好吃到舔手指。"
+        },
+        {
+            n: "椰子水",
+            e: "🧃",
+            c: "零食饮品",
+            p: "49.9元",
+            spec: "多瓶装",
+            u: "配料只有椰子水",
+            s: 4,
+            b: "",
+            d: "无添加清爽解渴，运动后补水也合适。"
+        },
+        {
+            n: "牛肉馅酥脆饼干",
+            e: "🍘",
+            c: "零食饮品",
+            p: "59.9元",
+            spec: "80小包",
+            u: "约0.75元/包",
+            s: 4,
+            b: "",
+            d: "肉香爆炸，咸口党本命零食，独立小包不怕受潮。"
+        },
+        {
+            n: "黄油鸡蛋卷",
+            e: "🥖",
+            c: "零食饮品",
+            p: "59.8元",
+            spec: "1盒",
+            u: "香酥掉渣",
+            s: 4,
+            b: "",
+            d: "浓郁黄油香混合蛋香，宝藏零食。"
+        },
+        {
+            n: "糖水黄桃软罐头",
+            e: "🍑",
+            c: "零食饮品",
+            p: "26.8元",
+            spec: "1.5kg",
+            u: "甜而不腻",
+            s: 4,
+            b: "",
+            d: "口感爽脆，冷藏后更好吃，量大实惠。"
+        },
+        {
+            n: "海盐苏打饼干",
+            e: "🍪",
+            c: "零食饮品",
+            p: "约30元档",
+            spec: "大袋",
+            u: "早餐加餐皆宜",
+            s: 4,
+            b: "",
+            d: "咸香酥脆，配料简单，办公室囤一袋。"
+        },
+        {
+            n: "泡面桶",
+            e: "🍜",
+            c: "零食饮品",
+            p: "168元",
+            spec: "24盒",
+            u: "7元/盒",
+            s: 3,
+            b: "",
+            d: "多口味混搭，宿舍加班囤货，单盒比便利店便宜。"
+        },
+        // 日用家居
+        {
+            n: "MM浓缩洗衣液",
+            e: "🧴",
+            c: "日用家居",
+            p: "不到50元",
+            spec: "5L",
+            u: "单次洗衣<0.6元",
+            s: 5,
+            b: "king",
+            d: "去污力强香味淡雅，单价约为超市品牌的1/3，囤一次用半年。"
+        },
+        {
+            n: "MM抽纸",
+            e: "🧻",
+            c: "日用家居",
+            p: "39.9元",
+            spec: "24包×100抽",
+            u: "约1.7元/包",
+            s: 5,
+            b: "king",
+            d: "四层加厚原木浆，柔软不易破，纸品单价比普通超市低40%以上。"
+        },
+        {
+            n: "MM洁面柔巾（洗脸巾）",
+            e: "🧼",
+            c: "日用家居",
+            p: "约5.8元/包",
+            spec: "多包装",
+            u: "100%纯棉加厚",
+            s: 5,
+            b: "mm",
+            d: "敏感肌可用，擦脸卸妆湿敷都行，比美妆品牌便宜一大截。"
+        },
+        {
+            n: "MM洗衣凝珠",
+            e: "💧",
+            c: "日用家居",
+            p: "69.9元",
+            spec: "2.35kg",
+            u: "一颗搞定一桶衣",
+            s: 4,
+            b: "mm",
+            d: "深层洁净双态珠，家庭洗衣量大时特别省心。"
+        },
+        {
+            n: "MM厨房纸巾",
+            e: "🗞️",
+            c: "日用家居",
+            p: "约53.9元",
+            spec: "16卷",
+            u: "约3.4元/卷",
+            s: 4,
+            b: "mm",
+            d: "厚实吸水吸油，量大耐用，家庭囤货首选。"
+        },
+        {
+            n: "MM碱性电池",
+            e: "🔋",
+            c: "日用家居",
+            p: "约0.83元/节",
+            spec: "大盒装",
+            u: "比电商还便宜",
+            s: 4,
+            b: "mm",
+            d: "品质稳定不虚标，遥控器玩具囤一盒用很久。"
+        },
+        {
+            n: "家庭装湿厕纸",
+            e: "🚻",
+            c: "日用家居",
+            p: "39.9元",
+            spec: "10包×40片",
+            u: "约0.1元/片",
+            s: 4,
+            b: "",
+            d: "可冲散材质，用过就回不去系列。"
+        },
+        {
+            n: "一次性本色纸杯",
+            e: "🥤",
+            c: "日用家居",
+            p: "29.8元",
+            spec: "300个",
+            u: "约0.1元/个",
+            s: 4,
+            b: "",
+            d: "聚会办公待客必备，厚实不烫手。"
+        },
+        {
+            n: "绿豆粉丝",
+            e: "🍝",
+            c: "日用家居",
+            p: "23.8元",
+            spec: "2斤",
+            u: "配料只有绿豆和水",
+            s: 4,
+            b: "",
+            d: "无添加，泡发根根分明，炒米粉一绝，回购率高。"
+        },
+    ];
+
+    const grid = document.getElementById('grid'), chips = document.getElementById('chips'),
+        search = document.getElementById('search'), sort = document.getElementById('sort'),
+        empty = document.getElementById('empty');
+    let cat = "全部";
+    document.getElementById('statCount').textContent = ITEMS.length;
+
+    CATS.forEach(c => {
+        const b = document.createElement('button');
+        b.className = 'chip' + (c === cat ? ' active' : '');
+        b.textContent = c;
+        b.onclick = () => {
+            cat = c;
+            document.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x.textContent === c));
+            render();
+        };
+        chips.appendChild(b);
+    });
+    search.oninput = render;
+    sort.onchange = render;
+
+    function stars(n) {
+        return '★'.repeat(n) + '<span class="dim">' + '★'.repeat(5 - n) + '</span>';
+    }
+
+    function badge(b) {
+        return b === 'king' ? '<span class="badge king">性价比之王</span>' : b === 'hot' ? '<span class="badge hot">网红爆款</span>' : b === 'mm' ? '<span class="badge mm">MM自营</span>' : '';
+    }
+
+    function render() {
+        const q = search.value.trim().toLowerCase();
+        let list = ITEMS.filter(i => (cat === '全部' || i.c === cat) && (!q || (i.n + i.d + i.c).toLowerCase().includes(q)));
+        if (sort.value === 'value') list = [...list].sort((a, b) => b.s - a.s);
+        if (sort.value === 'priceAsc') list = [...list].sort((a, b) => (parseFloat(a.p.replace(/[^\d.]/g, '')) || 9999) - (parseFloat(b.p.replace(/[^\d.]/g, '')) || 9999));
+        grid.innerHTML = list.map(i => `
+    <div class="card">
+      ${badge(i.b)}
+      <div class="emoji">${i.e}</div>
+      <h3>${i.n}</h3>
+      <div class="price">${i.p} <small>/ ${i.spec}</small></div>
+      <div class="unit">↳ ${i.u}</div>
+      <div class="stars">${stars(i.s)}</div>
+      <div class="desc">${i.d}</div>
+      <div class="cat-tag">${i.c}</div>
+    </div>`).join('');
+        empty.style.display = list.length ? 'none' : 'block';
+    }
+
+    render();
+</script>
+</body>
+</html>

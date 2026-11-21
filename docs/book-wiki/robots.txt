@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /book-wiki/wechat/callback
+
+User-agent: Baiduspider
+Allow: /
+Disallow: /book-wiki/wechat/callback
+
+User-agent: Bingbot
+Allow: /
+Disallow: /book-wiki/wechat/callback
+
+Sitemap: https://dby321.github.io/book-wiki/sitemap.xml
